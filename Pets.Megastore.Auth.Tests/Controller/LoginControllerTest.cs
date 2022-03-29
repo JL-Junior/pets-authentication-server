@@ -12,6 +12,7 @@ namespace Pets.Megastore.Auth.Tests
         private readonly Mock<ILoginService> _mockService;
         private readonly ILogger<LoginController> _logger;
         private LoginController _sut;
+        
         public LoginControllerTest()
         {
             _mockService = new Mock<ILoginService>();
