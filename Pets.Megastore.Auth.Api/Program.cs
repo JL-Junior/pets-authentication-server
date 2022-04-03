@@ -18,6 +18,10 @@ namespace Pets.Megastore.Auth.Api
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
+                .ConfigureAppConfiguration((hosting, config) =>
+                {
+                    config.AddEnvironmentVariables("AUTH_");
+                })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();

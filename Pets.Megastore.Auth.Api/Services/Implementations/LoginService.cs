@@ -17,7 +17,7 @@ namespace Pets.Megastore.Auth.Api.Services
             AuthenticationType type = GetAuthType(authorization);
             if(type.Equals(AuthenticationType.BASIC))
             {
-                //TODO implements
+                
             }
             return null;
         }

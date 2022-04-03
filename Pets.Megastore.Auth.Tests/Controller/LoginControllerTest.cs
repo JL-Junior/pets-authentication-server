@@ -7,7 +7,7 @@ using Xunit;
 
 namespace Pets.Megastore.Auth.Tests
 {
-    public class LoginControllertest
+    public class LoginControllerTest
     {
         private readonly Mock<ILoginService> _mockService;
         private readonly ILogger<LoginController> _logger;

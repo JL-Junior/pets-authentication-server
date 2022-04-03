@@ -21,6 +21,7 @@ namespace Pets.Megastore.Auth.Api
         {
             services.AddServicesConfiguration();
             services.AddControllers();
+            services.AddDbConfiguration(Configuration);
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Authentication", Version = "v1" });
