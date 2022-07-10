@@ -15,10 +15,10 @@ namespace Pets.Megastore.Auth.Api.Data.Configuration
                 .HasName("pk_users");
 
             builder.Property( p => p.Id)
-            .HasIdentityOptions(0,1,1,null,false,null)
-            .HasColumnName("id_user")
-            .HasColumnType("int8")
-            .IsRequired();
+                .HasIdentityOptions(0,1,1,null,false,null)
+                .HasColumnName("id_user")
+                .HasColumnType("int8")
+                .IsRequired();
 
             builder.Property(p => p.FirstName)
                 .HasColumnName("tx_first_name")

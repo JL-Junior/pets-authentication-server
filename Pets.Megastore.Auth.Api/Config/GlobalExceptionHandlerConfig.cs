@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Hosting;
+using Pets.Megastore.Auth.Api.Exceptions;
 using Pets.Megastore.Auth.Api.Models;
 using Pets.Megastore.Auth.Api.Utils;
 
@@ -32,21 +33,32 @@ namespace Pets.Megastore.Auth.Api
 
         private static async Task handleExceptions(IExceptionHandlerFeature exceptionFeature, HttpContext context)
         {
-            var error = exceptionFeature.Error;
-            await handleGenericException(context);
+            Exception error = exceptionFeature.Error;
+            switch (error){
+                case RestException:
+                    await handleRestException(context, (RestException) error);
+                    break;
+                default:
+                    await handleGenericException(context);
+                    break;
+            }
+        }
+
+        private static async Task handleRestException(HttpContext context, RestException error)
+        {
+            context.Response.StatusCode = error.Status;
+            await context.Response.WriteAsync(error.Response.ToJson());
         }
 
         private static async Task handleGenericException(HttpContext context)
         {            
             ErrorResponseDto dto = new ErrorResponseDto{
-                Error = MessagesUtils.INTERNAL_SERVER,
-                Messages = new List<string>(){MessagesUtils.INTERNAL_SERVER}.ToArray(),
-                Path = context.Request.Path,
+                Message = MessagesUtils.INTERNAL_SERVER,
                 Status = ((int)HttpStatusCode.InternalServerError),
                 TimeStamp = DateTime.Now
             };
-            await context.Response.WriteAsync(await dto.ToJsonAsync());
             context.Response.StatusCode = 500;
+            await context.Response.WriteAsync(dto.ToJson());
         }
     }
 }

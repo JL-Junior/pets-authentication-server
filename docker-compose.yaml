@@ -1,18 +1,36 @@
 version: '3.9'
 services:
   db:
-    image: postgres:alpine
+    image: postgres
     container_name: auth-db
     restart: always
     environment:
-      - POSTGRES_USER: ${AUTH_API_DB_USER}
-      - POSTGRES_PASSWORD: ${AUTH_API_DB_PASSWORD}
-      - POSTGRES_DB: ${AUTH_API_DB_DATABASE}
+      POSTGRES_USER: ${AUTH_API_DB_USER}
+      POSTGRES_PASSWORD: ${AUTH_API_DB_PASSWORD}
+      POSTGRES_DB: ${AUTH_API_DB_DATABASE}
+    ports:
+      - ${AUTH_API_DB_PORT}:5432
     volumes:
-      - ./postgres-data:/var/lib/postgresql/data:ro
+      - auth-volume:/var/lib/postgresql/data
     networks:
-      - pets-net
+      - auth-net
   
-  api:
-    build: .
-    container_name: name
+  redis:
+    image: redis:alpine
+    container_name: auth-redis
+    ports:
+      - ${AUTH_API_REDIS_PORT}
+    networks:
+      - auth-net
+
+networks:
+  auth-net:
+volumes:
+  auth-volume:
+
+
+
+
+    
+
+    

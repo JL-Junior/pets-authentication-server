@@ -8,6 +8,7 @@ namespace Pets.Megastore.Auth.Api
         public static void AddServicesConfiguration(this IServiceCollection services)
         {
             services.AddScoped<ILoginService, LoginService>();
+            services.AddScoped<ITokenService, TokenService>();
         }
     }
 }

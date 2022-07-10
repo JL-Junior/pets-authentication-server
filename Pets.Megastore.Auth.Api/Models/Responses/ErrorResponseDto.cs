@@ -1,4 +1,5 @@
 using System;
+using System.Text.Json.Serialization;
 
 namespace Pets.Megastore.Auth.Api.Models
 {
@@ -6,8 +7,6 @@ namespace Pets.Megastore.Auth.Api.Models
     {
         public int Status { get; set; }
         public DateTime TimeStamp { get; set; }
-        public string Error { get; set; }
-        public string Path { get; set; }
-        public string[] Messages { get; set; }
+        public string Message { get; set; }
     }
 }

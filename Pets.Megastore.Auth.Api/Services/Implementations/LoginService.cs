@@ -1,7 +1,9 @@
 using System;
 using System.Threading.Tasks;
 using Pets.Megastore.Auth.Api.Enums;
+using Pets.Megastore.Auth.Api.Exceptions;
 using Pets.Megastore.Auth.Api.Models;
+using Pets.Megastore.Auth.Api.Utils;
 
 namespace Pets.Megastore.Auth.Api.Services
 {
@@ -12,14 +14,12 @@ namespace Pets.Megastore.Auth.Api.Services
         {
             _tokenService = tokenService;
         }
-        public Task<JwtTokenDto> GetTokenAsync(string authorization)
-        {
+        
+        public async Task<JwtTokenDto> GetTokenAsync(string authorization)        {
             AuthenticationType type = GetAuthType(authorization);
-            if(type.Equals(AuthenticationType.BASIC))
-            {
-                
-            }
-            return null;
+            if(!type.Equals(AuthenticationType.BASIC)) throw RestException.Unauthorized(MessagesUtils.NOT_VALID_AUTH_TYPE);
+            
+            return await _tokenService.GetBasicToken(authorization);
         }
 
         private AuthenticationType GetAuthType(string authorization)

@@ -6,6 +6,7 @@ using Pets.Megastore.Auth.Api.Models;
 
 namespace Pets.Megastore.Auth.Api.Controllers.Apis
 {
+    [Route("/login")]
     public abstract class LoginApi : ControllerBase
     {
         protected readonly ILogger<LoginApi> _logger;
@@ -15,9 +16,14 @@ namespace Pets.Megastore.Auth.Api.Controllers.Apis
             logger.Log(LogLevel.Debug, "Logando", "Logando denovo");
         }
 
-        [HttpGet("/login")]
+        [HttpGet("/signin")]
         [ProducesResponseType(typeof(JwtTokenDto), 200)]
         [ProducesResponseType(typeof(ErrorResponseDto), 401)]
-        public abstract Task<ActionResult<JwtTokenDto>> Login([FromHeader(Name = "authorization")] string authorization);        
+        public abstract Task<ActionResult<JwtTokenDto>> Login([FromHeader(Name = "authorization")] string authorization);
+
+        [HttpPost("/signup")]      
+        [ProducesResponseType(typeof(JwtTokenDto), 200)]
+        [ProducesResponseType(typeof(ErrorResponseDto), 401)]
+        public abstract Task<ActionResult<JwtTokenDto>> Signup([FromBody] string body);
     }
 }

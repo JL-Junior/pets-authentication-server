@@ -19,9 +19,11 @@ namespace Pets.Megastore.Auth.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            
+            services.AddDbConfiguration(Configuration);
+            
             services.AddServicesConfiguration();
             services.AddControllers();
-            services.AddDbConfiguration(Configuration);
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Authentication", Version = "v1" });
@@ -38,9 +40,9 @@ namespace Pets.Megastore.Auth.Api
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Authentication v1"));
             }
             app.UseHttpsRedirection();
+            app.UseGlobalExceptionHandlers();
             app.UseRouting();
             app.UseAuthorization();
-            app.UseGlobalExceptionHandlers();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
