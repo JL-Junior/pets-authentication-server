@@ -3,7 +3,6 @@ services:
   db:
     image: postgres
     container_name: auth-db
-    restart: always
     environment:
       POSTGRES_USER: ${AUTH_API_DB_USER}
       POSTGRES_PASSWORD: ${AUTH_API_DB_PASSWORD}

@@ -19,15 +19,14 @@ namespace Pets.Megastore.Auth.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            
-            services.AddDbConfiguration(Configuration);
-            
-            services.AddServicesConfiguration();
-            services.AddControllers();
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Authentication", Version = "v1" });
-            });
+            services.AddServicesConfiguration()
+                .AddDbConfiguration(Configuration)
+                .AddRepositoriesConfiguration()
+                .AddSwaggerGen(c =>
+                {
+                    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Authentication", Version = "v1" });
+                })
+                .ConfigureControllersAndJsonSettings();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

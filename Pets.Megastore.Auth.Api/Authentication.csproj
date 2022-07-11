@@ -10,5 +10,6 @@
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="5.0.10"/>
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.17"/>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.17"/>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.2"/>
   </ItemGroup>
 </Project>

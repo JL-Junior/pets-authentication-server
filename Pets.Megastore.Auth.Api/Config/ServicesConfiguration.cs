@@ -5,10 +5,11 @@ namespace Pets.Megastore.Auth.Api
 {
     public static class ServicesConfiguration
     {
-        public static void AddServicesConfiguration(this IServiceCollection services)
+        public static IServiceCollection AddServicesConfiguration(this IServiceCollection services)
         {
-            services.AddScoped<ILoginService, LoginService>();
-            services.AddScoped<ITokenService, TokenService>();
+            return services
+                .AddScoped<ILoginService, LoginService>()
+                .AddScoped<ITokenService, TokenService>();
         }
     }
 }

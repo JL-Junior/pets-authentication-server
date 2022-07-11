@@ -16,12 +16,12 @@ namespace Pets.Megastore.Auth.Api.Controllers.Apis
             logger.Log(LogLevel.Debug, "Logando", "Logando denovo");
         }
 
-        [HttpGet("/signin")]
+        [HttpGet("signin")]
         [ProducesResponseType(typeof(JwtTokenDto), 200)]
         [ProducesResponseType(typeof(ErrorResponseDto), 401)]
-        public abstract Task<ActionResult<JwtTokenDto>> Login([FromHeader(Name = "authorization")] string authorization);
+        public abstract Task<ActionResult<JwtTokenDto>> Login([FromHeader] string authorization);
 
-        [HttpPost("/signup")]      
+        [HttpPost("signup")]      
         [ProducesResponseType(typeof(JwtTokenDto), 200)]
         [ProducesResponseType(typeof(ErrorResponseDto), 401)]
         public abstract Task<ActionResult<JwtTokenDto>> Signup([FromBody] string body);

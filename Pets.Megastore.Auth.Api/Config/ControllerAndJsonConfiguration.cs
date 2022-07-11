@@ -1,20 +1,20 @@
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Pets.Megastore.Auth.Api.Config
+namespace Pets.Megastore.Auth.Api
 {
-    public static class JsonNamingPolicyConfiguration
+    public static class ControllerAndJsonConfiguration
     {
-        public static IMvcBuilder configureJsonPolicies(this IMvcBuilder services){
-            return services.AddJsonOptions(configureOptions);            
+        public static IServiceCollection ConfigureControllersAndJsonSettings(this IServiceCollection services){
+            return services
+                .AddControllers()
+                .AddJsonOptions(ConfigureOptions)
+                .Services;            
         }
 
-        private static void configureOptions(JsonOptions options)
+        private static void ConfigureOptions(JsonOptions options)
         {
             var serializerOptions = options.JsonSerializerOptions;
             serializerOptions.PropertyNamingPolicy = SnakeCaseJsonPolicy.Instance;
