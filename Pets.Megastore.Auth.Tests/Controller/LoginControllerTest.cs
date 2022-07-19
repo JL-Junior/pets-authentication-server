@@ -23,7 +23,7 @@ namespace Pets.Megastore.Auth.Tests
         [Fact]
         void Login_When_Authorization_Not_Basic_Throw_Error()
         {
-            Assert.ThrowsAsync<NotImplementedException>(() => _sut.Login("auth"));
+            Assert.ThrowsAsync<NotImplementedException>(() => _sut.Signin("basic aldçsd"));
         }
     }
 }

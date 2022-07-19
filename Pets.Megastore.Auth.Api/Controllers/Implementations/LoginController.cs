@@ -19,7 +19,7 @@ namespace Pets.Megastore.Auth.Api.Controllers
             _loginService = loginService;
         }
 
-        public override async Task<ActionResult<JwtTokenDto>> Login(string authorization)
+        public override async Task<ActionResult<JwtTokenDto>> Signin(string authorization)
         {
             _logger.LogDebug("Calling login route:", authorization);
             return Ok(await _loginService.GetTokenAsync(authorization));            

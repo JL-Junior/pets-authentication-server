@@ -3,6 +3,8 @@ services:
   db:
     image: postgres
     container_name: auth-db
+    env_file:
+      - ./.env
     environment:
       POSTGRES_USER: ${AUTH_API_DB_USER}
       POSTGRES_PASSWORD: ${AUTH_API_DB_PASSWORD}
@@ -11,6 +13,7 @@ services:
       - ${AUTH_API_DB_PORT}:5432
     volumes:
       - auth-volume:/var/lib/postgresql/data
+      - ./scripts:/docker-entrypoint-initdb.d
     networks:
       - auth-net
   
@@ -26,6 +29,7 @@ networks:
   auth-net:
 volumes:
   auth-volume:
+
 
 
 

@@ -1,9 +1,8 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Pets.Megastore.Auth.Api.Data;
-using Pets.Megastore.Auth.Api.Data.Entities;
 
 namespace Pets.Megastore.Auth.Api.Repositories
 {
@@ -11,9 +10,9 @@ namespace Pets.Megastore.Auth.Api.Repositories
     {
         private readonly AppDbContext _context;
 
-        public List<User> getAllUsers()
+        public List<IdentityUser> getAllUsers()
         {
-            return _context.Users.ToList();
+            return _context.Users.AsNoTracking().ToList();
         }
     }
 }

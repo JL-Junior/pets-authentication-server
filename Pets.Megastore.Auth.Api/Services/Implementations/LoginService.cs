@@ -19,7 +19,20 @@ namespace Pets.Megastore.Auth.Api.Services
             AuthenticationType type = GetAuthType(authorization);
             if(!type.Equals(AuthenticationType.BASIC)) throw RestException.Unauthorized(MessagesUtils.NOT_VALID_AUTH_TYPE);
             
-            return await _tokenService.GetBasicToken(authorization);
+            
+            return await _tokenService.GetBasicToken(
+                getUserFromAuth(authorization), 
+                getPasswordFromAuth(authorization)
+            );
+        }
+
+        private string getPasswordFromAuth(string authorization)
+        {
+            throw new NotImplementedException();
+        }
+
+        private string getUserFromAuth(string authorization){
+        throw new NotImplementedException();
         }
 
         private AuthenticationType GetAuthType(string authorization)

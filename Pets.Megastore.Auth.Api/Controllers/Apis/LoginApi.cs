@@ -19,7 +19,7 @@ namespace Pets.Megastore.Auth.Api.Controllers.Apis
         [HttpGet("signin")]
         [ProducesResponseType(typeof(JwtTokenDto), 200)]
         [ProducesResponseType(typeof(ErrorResponseDto), 401)]
-        public abstract Task<ActionResult<JwtTokenDto>> Login([FromHeader] string authorization);
+        public abstract Task<ActionResult<JwtTokenDto>> Signin([FromHeader] string authorization);
 
         [HttpPost("signup")]      
         [ProducesResponseType(typeof(JwtTokenDto), 200)]

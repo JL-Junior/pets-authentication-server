@@ -26,10 +26,7 @@ namespace Pets.Megastore.Auth.Api
 
         public override string ConvertName(string name)
         {
-            return string.Concat(
-                name.Select((x, i) => i > 0 && char.IsUpper(x) 
-                ? "_" + x.ToString() 
-                : x.ToString())).ToLower();
+            return name.ToSnakeCase();
         }
     }
 }

@@ -1,81 +1,60 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Npgsql;
-using Pets.Megastore.Auth.Api.Data.Entities;
+using Pets.Megastore.Auth.Api.Utils;
 
 namespace Pets.Megastore.Auth.Api.Data
 {
-    public class AppDbContext : DbContext
+    public class AppDbContext : IdentityDbContext
     {
-        public DbSet<User> Users {get;set;}
-        private readonly IEntityTypeConfiguration<BaseEntity> _baseEntityConfigurer;
-        private readonly IEntityTypeConfiguration<User> _userConfigurer;
-
         private readonly IConfiguration _configuration;
-
         private readonly ILogger _logger;
+
         public AppDbContext(
+            DbContextOptions<AppDbContext> options,
             IConfiguration configuration,
-            ILogger<AppDbContext> logger, 
-            IEntityTypeConfiguration<BaseEntity> baseEntityConfigurer,
-            IEntityTypeConfiguration<User> userConfigurer)
+            ILogger<AppDbContext> logger
+            ): base(options)
         {
             _configuration = configuration;
             _logger = logger;
-            _baseEntityConfigurer = baseEntityConfigurer;
-            _userConfigurer = userConfigurer;
         }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        protected override void OnModelCreating(ModelBuilder builder)
         {
-            //modelBuilder.ApplyConfiguration<BaseEntity>(_baseEntityConfigurer);            
-            modelBuilder.ApplyConfiguration<User>(_userConfigurer);            
-        }
-        
-        public override int SaveChanges(bool acceptAllChangesOnSuccess)
-        {
-            OnBeforeSaving();
-            return base.SaveChanges(acceptAllChangesOnSuccess);
+            base.OnModelCreating(builder);
+            builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+            IEnumerable<IMutableEntityType> entities = builder.Model.GetEntityTypes();
+
+            ConfigureColumnNames(entities);
+            ConfigureTableNames(entities);
         }
 
-        public override async Task<int> SaveChangesAsync(
-           bool acceptAllChangesOnSuccess,
-           CancellationToken cancellationToken = default(CancellationToken)
-        )
+        private void ConfigureTableNames(IEnumerable<IMutableEntityType> entities)
         {
-            OnBeforeSaving();
-            return (await base.SaveChangesAsync(acceptAllChangesOnSuccess,
-                          cancellationToken));
+            foreach(IMutableEntityType entity in entities){
+                EntityTypeBuilder entityBuilder = new EntityTypeBuilder(entity);
+                DbUtils.ConfigureTableName(entityBuilder, entityBuilder.Metadata.ClrType);
+            }
         }
 
-        private void OnBeforeSaving()
+        private void ConfigureColumnNames(IEnumerable<IMutableEntityType> entities)
         {
-            var baseEntries = ChangeTracker.Entries().Where(e => e.Entity is BaseEntity);
-            var utcNow = DateTime.UtcNow;
-            baseEntries.ToList().ForEach(this.SetProperties);
-        }
-
-        private void SetProperties(EntityEntry entry)
-        {
-            BaseEntity trackable = (BaseEntity) entry.Entity;
-            var utcNow = DateTime.UtcNow;
-            switch (entry.State)
-            {
-                case EntityState.Modified:
-                    trackable.UpdatedAt = utcNow;
-                    entry.Property("CreatedAt").IsModified = false;
-                    break;
-
-                case EntityState.Added:
-                    trackable.CreatedAt = utcNow;
-                    trackable.UpdatedAt = utcNow;
-                    break;
+            
+            foreach(IMutableEntityType entity in entities){
+                EntityTypeBuilder entityBuilder = new EntityTypeBuilder(entity);
+                DbUtils.ConfigureColumnNames(entityBuilder, entityBuilder.Metadata.ClrType);
             }
         }
     }

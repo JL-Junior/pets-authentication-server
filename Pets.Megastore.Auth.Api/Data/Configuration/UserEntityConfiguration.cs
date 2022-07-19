@@ -1,45 +1,20 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Pets.Megastore.Auth.Api.Data.Entities;
+using Pets.Megastore.Auth.Api.Utils;
 
 namespace Pets.Megastore.Auth.Api.Data.Configuration
 {
-    public class UserEntityConfiguration : IEntityTypeConfiguration<User>
+    public class UserEntityConfiguration : IEntityTypeConfiguration<IdentityUser>
     {
-        public void Configure(EntityTypeBuilder<User> builder)
+        public void Configure(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder<IdentityUser> builder)
         {
-            builder.ToTable("tb_users");
-
-            builder.HasKey(p => p.Id)
-                .HasName("pk_users");
-
-            builder.Property( p => p.Id)
-                .HasIdentityOptions(0,1,1,null,false,null)
-                .HasColumnName("id_user")
-                .HasColumnType("int8")
-                .IsRequired();
-
-            builder.Property(p => p.FirstName)
-                .HasColumnName("tx_first_name")
-                .HasColumnType("varchar")
-                .HasMaxLength(20);
-
-            builder.Property(p => p.FirstName)
-                .HasColumnName("tx_last_name")
-                .HasColumnType("varchar")
-                .HasMaxLength(50);
             
-            builder.Property( p => p.UserName)
-                .HasColumnName("tx_user_name")
-                .HasColumnType("varchar")
-                .HasMaxLength(20);
-
-            builder.Property( p => p.Password)
-                .HasColumnName("tx_password")
-                .HasColumnType("varchar")
-                .HasMaxLength(64);
-
+            builder.HasIndex(p => p.NormalizedEmail, "idx_normalized_email");
+            builder.HasIndex(p => p.UserName, "idx_user_name");
         }
     }
 }

@@ -3,8 +3,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Npgsql;
 using Pets.Megastore.Auth.Api.Data;
-using Pets.Megastore.Auth.Api.Data.Configuration;
-using Pets.Megastore.Auth.Api.Data.Entities;
 
 namespace Pets.Megastore.Auth.Api
 {
@@ -19,11 +17,7 @@ namespace Pets.Megastore.Auth.Api
             sb.Password = configuration["AUTH_API_DB_PASSWORD"];
             sb.Username = configuration["AUTH_API_DB_USER"];
 
-            return services
-                .AddScoped<IEntityTypeConfiguration<BaseEntity>, BaseEntityConfiguration>()
-                .AddScoped<IEntityTypeConfiguration<User>, UserEntityConfiguration>()
-                .AddDbContext<AppDbContext>(
-                    options => options.UseNpgsql(sb.ConnectionString));
+            return services.AddDbContext<AppDbContext>(options => options.UseNpgsql(sb.ConnectionString));
         }
     }
 }
