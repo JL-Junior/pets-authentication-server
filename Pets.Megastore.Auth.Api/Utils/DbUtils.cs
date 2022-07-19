@@ -11,12 +11,7 @@ namespace Pets.Megastore.Auth.Api.Utils
     public static class DbUtils
     {
         public static void ConfigureColumnNames(EntityTypeBuilder builder, Type type){
-            var properties = type.GetProperties()
-                .Where(p => !p.Name.Equals("Builder", StringComparison.InvariantCultureIgnoreCase))
-                .Where(p => !p.Name.Equals("IsKeyless", StringComparison.InvariantCultureIgnoreCase))
-                .Where(p => !p.Name.Equals("DefiningNavigationName", StringComparison.InvariantCultureIgnoreCase))
-                .Where(p => !p.Name.Equals("DefiningEntityType", StringComparison.InvariantCultureIgnoreCase))
-                .Where(p => !p.Name.Equals("BaseType", StringComparison.InvariantCultureIgnoreCase));
+            var properties = type.GetProperties();
                 
             foreach(var property in properties){
                 builder.Property(property.Name).HasColumnName(property.Name.ToSnakeCase());
