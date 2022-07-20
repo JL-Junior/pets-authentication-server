@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
@@ -12,6 +13,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Npgsql;
+using Pets.Megastore.Auth.Api.Services;
 using Pets.Megastore.Auth.Api.Utils;
 
 namespace Pets.Megastore.Auth.Api.Data
@@ -39,7 +41,15 @@ namespace Pets.Megastore.Auth.Api.Data
 
             ConfigureColumnNames(entities);
             ConfigureTableNames(entities);
+            SeedingData(builder);
         }
+
+        private void SeedingData(ModelBuilder builder)
+        {            
+            builder.Entity<IdentityRole>().HasData(SeedingService.GetIdentityRoles());
+        }
+
+       
 
         private void ConfigureTableNames(IEnumerable<IMutableEntityType> entities)
         {

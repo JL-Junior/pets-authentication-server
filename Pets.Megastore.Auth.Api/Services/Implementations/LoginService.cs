@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication;
 using Pets.Megastore.Auth.Api.Enums;
 using Pets.Megastore.Auth.Api.Exceptions;
 using Pets.Megastore.Auth.Api.Models;
@@ -14,38 +15,44 @@ namespace Pets.Megastore.Auth.Api.Services
         {
             _tokenService = tokenService;
         }
-        
-        public async Task<JwtTokenDto> GetTokenAsync(string authorization)        {
+
+        public async Task<JwtTokenDto> GetTokenAsync(string authorization)
+        {
             AuthenticationType type = GetAuthType(authorization);
-            if(!type.Equals(AuthenticationType.BASIC)) throw RestException.Unauthorized(MessagesUtils.NOT_VALID_AUTH_TYPE);
-            
-            
+            if (!type.Equals(AuthenticationType.BASIC)) throw RestException.Unauthorized(MessagesUtils.NOT_VALID_AUTH_TYPE);
+            string credentialString = authorization.Replace("basic ", "", true, null).TrimStart().TrimEnd();
             return await _tokenService.GetBasicToken(
-                getUserFromAuth(authorization), 
-                getPasswordFromAuth(authorization)
+                GetUserFromAuth(credentialString),
+                GetPasswordFromAuth(credentialString)
             );
         }
 
-        private string getPasswordFromAuth(string authorization)
+        private string GetUserFromAuth(string credentialString)
         {
-            throw new NotImplementedException();
+            return SplitCredentials(credentialString)[1];
         }
 
-        private string getUserFromAuth(string authorization){
-        throw new NotImplementedException();
+        private string GetPasswordFromAuth(string credentialString)
+        {
+            return SplitCredentials(credentialString)[1];
+        }
+
+        private string[] SplitCredentials(String credentialString)
+        {
+            return credentialString.Split(":", 2);
         }
 
         private AuthenticationType GetAuthType(string authorization)
         {
-            if(authorization == null)
+            if (authorization == null)
                 return AuthenticationType.NONE;
-            
+
             string type = authorization.Split(" ", StringSplitOptions.RemoveEmptyEntries)[0];
 
-            if(type.Equals("basic", StringComparison.CurrentCultureIgnoreCase))
+            if (type.Equals("basic", StringComparison.CurrentCultureIgnoreCase))
                 return AuthenticationType.BASIC;
-            
-            if(type.Equals("bearer", StringComparison.CurrentCultureIgnoreCase))
+
+            if (type.Equals("bearer", StringComparison.CurrentCultureIgnoreCase))
                 return AuthenticationType.BEARER;
 
             return AuthenticationType.NONE;
